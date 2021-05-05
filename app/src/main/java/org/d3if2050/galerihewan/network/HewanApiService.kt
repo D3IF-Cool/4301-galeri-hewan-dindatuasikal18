@@ -5,13 +5,18 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 
 private const val BASE_URL = "https://dif.indraazimi.com/"
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
+
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
 interface HewanApiService {
     @GET("listhewan.json")
-    suspend fun getHewan(): String
+    suspend fun getHewan(): List<Hewan>
+
 }
 object HewanApi {
     val service: HewanApiService by lazy {
